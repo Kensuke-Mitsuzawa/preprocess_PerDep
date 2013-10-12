@@ -1,3 +1,7 @@
+#myself
+treebank/
+
+
 *.py[cod]
 
 # C extensions
