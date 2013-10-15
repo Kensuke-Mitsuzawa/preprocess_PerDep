@@ -1,6 +1,13 @@
 #! /usr/bin/python
 # -*- coding:utf-8 -*-
 
+"""
+annotated用のフォーマットからCoNLLのフォーマットへ変換する．
+ARGS: アノテーションフォーマットのコーパスファイルパス CoNLL化したコーパスの保存先パス
+
+TODO:stemの部分をValencey Lexicon for Persian Verbsで代用できるようにがんばる
+https://github.com/rasoolims/PersianVerbAnalyzer/
+"""
 import sys, codecs, re;
 import pos_map_to_perdep;
 
