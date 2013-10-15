@@ -6,7 +6,7 @@ PerlexとPerDepは若干，違うPOSの体系を採用している．このた�
 """
 
 __author__='Kensuke Mitsuzawa';
-__date__='2013/10/14';
+__date__='2013/10/16';
 
 import sys, codecs, re, json;
 
@@ -26,6 +26,8 @@ def map_pos(wordset_dic, word, information_tuple):
     pos=information_tuple[0];
     category_info=information_tuple[1];
     inflection_info=information_tuple[2];
+
+    target_tuple=None;
 
     if pos==u'ADJ':
         if re.findall(ur'Cmp.*', inflection_info):
@@ -56,34 +58,76 @@ def map_pos(wordset_dic, word, information_tuple):
     elif pos==u'V':
         number=None;
         person=None;
+        tma=None;
         if re.findall(ur'sg', inflection_info):
             number=u'SING';
         elif re.findall(ur'Plur', inflection_info):
             number=u'PLUR';
 
-        if re.findall(ur'1p', inflection_info):
+        
+        if re.findall(ur'1', inflection_info):
             person=u'1';
-        elif re.findall(ur'2p', inflection_info):
-            person=u'2';
-        elif re.findall(ur'3p', inflection_info):
+        
+        elif re.findall(ur'3', inflection_info):
+            person=u'3';
+        
+        elif re.findall(ur'2\*3', inflection_info):
             person=u'3';
 
-        if word in V_PASS:
-            target_tuple=(u'V', u'PASS', (number, person));
-        elif word in V_ACT:
-            target_tuple=(u'V', u'ACT', (number, person));
-        else:
-            target_tuple=(u'V', u'V', (number, person))
+        elif re.findall(ur'2', inflection_info):
+            person=u'2';
+       
 
-    if pos==u'INTexcel':
+        if re.findall(ur'imperNorm', inflection_info):
+            tma=u'HA';
+        #Indicative Future:AY is not implemented in this version
+        #GBES, GB, GBESE, GESEL, GBEL, GEL also neither
+
+        elif re.findall(ur'ImpComp', inflection_info):
+            tma=u'GNES';
+
+        elif re.findall(ur'Pastprog', inflection_info):
+            tma=u'GES';
+
+        elif re.findall(ur'Preterit', inflection_info):
+            tma=u'GN';
+
+        elif re.findall(ur'PreInd', inflection_info):
+            tma=u'H';
+
+        elif re.findall(u'Preparf', inflection_info):
+            tma=u'GS';
+
+        elif re.findall(u'PreSubj', inflection_info):
+            tma=u'HEL';
+
+
+        if word in V_PASS:
+            target_tuple=(u'V', u'PASS', (number, person, tma));
+        elif word in V_ACT:
+            target_tuple=(u'V', u'ACT', (number, person, tma));
+        else:
+            target_tuple=(u'V', u'V', (number, person, tma));
+
+    elif pos==u'VAUX':
+        target_tuple=(u'V', u'MODL');
+
+
+    elif pos==u'INTexcl':
         target_tuple=(u'ADR', u'ADR');
 
-    if pos==u'CON':
-        if category_info in [u'CONJ', u'ADVcond', u'ADVrel', u'ADVcoord']:
+    elif pos==u'CON':
+        if category_info in [u'CONJ', u'ADVcond', u'ADVrel']:
             target_tuple=(u'CONJ', u'CONJ');
 
         if category_info==u'SUBR':
             target_tuple=(u'SUBR', u'SUBR');
+
+    elif pos==u'ADVcoord':
+        target_tuple=(u'CONJ', u'CONJ');
+
+    elif pos==u'CONJsubord':
+        target_tuple=(u'SUBR', u'SUBR');
 
     #IDENは未実装
 
@@ -131,6 +175,10 @@ def map_pos(wordset_dic, word, information_tuple):
 
     elif pos==u'DETdem':
         target_tuple=(u'PREM', u'DEMAJ');
+
+    elif pos==u'PR':
+        if category_info==u'RECPR':
+            target_tuple=(u'PR', u'RECPR');
 
     elif pos==u'DET':
         if category_info==u'EXAJ':
