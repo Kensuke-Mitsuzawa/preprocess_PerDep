@@ -12,8 +12,12 @@ calc_entry_number_treebank.py:perdepをもし語彙辞書として用いたな�
 wordset.json:POSのマップを行う際に，表層単語を見ないと分類できない場合が多々ある．そのためにつくったjsonファイル．pos_map_to_perdepで使う．  
 make_specific_wordset.py:上のjsonファイルを作るスクリプト  
 treebank/:perdepツリーバンクのローマ字化したファイルだけを保存するディレクトリ  
+crf_format:CRF++で利用するためのフォーマットファイル  
+conll_format:CoNLL Dependency Parsingのフォーマットファイルを保存  
 test_corpus:口承文芸コーパスのannotationフォーマットを保存するディレクトリ  
 python_virastart:アラビア文字とローマ字の相互変換スクリプト
+annotation_to_crf.py:CRF++でPOSタグ付けに利用できるフォーマットに出力するスクリプト  
+
 
 
 ##Document in English
