@@ -70,7 +70,7 @@ def conll_format(annotated_corpus_path):
 
                     
                     conll_token_format=u'{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}\t{8}\t{9}\n'\
-                            .format(str(token_id),surface,stem,coarse_pos,fine_pos,feature_column,u'0',u'',u'_', u'_');
+                            .format(str(token_id),surface,stem,coarse_pos,fine_pos,feature_column,u'0',u'0',u'_', u'_');
 
                     conll_format_stack.append(conll_token_format);
                     token_id=token_id+1;
@@ -78,15 +78,17 @@ def conll_format(annotated_corpus_path):
     return conll_format_stack;
 
 def main(annotated_corpus_path, conll_file_path):
+    conll_dir='./conll_format/'
+
     conll_format_stack=conll_format(annotated_corpus_path);
-    with codecs.open(conll_file_path, 'w', 'utf-8') as f:
+    with codecs.open(conll_dir+conll_file_path+'.conll', 'w', 'utf-8') as f:
         for item in conll_format_stack:
             f.write(item);
     f.close();
 
 if __name__=='__main__':
     annotated_corpus_path='./test_corpus/e1998t0001.annotation_2nd.validated';
-    conll_file_path='./test'
+    conll_file_path='test'
     main(annotated_corpus_path, conll_file_path);
 
 

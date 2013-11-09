@@ -1,6 +1,6 @@
 #myself
 treebank/
-
+*DS_Store
 
 *.py[cod]
 
